@@ -45,6 +45,7 @@
   "scripts": {
     "build": "node node_modules/typescript/bin/tsc --noEmit && node node_modules/tsdown/dist/run.mjs",
     "test": "node node_modules/vitest/vitest.mjs run",
+    "test:ptc": "node --test tests/ptc-host.test.mjs",
     "prepublishOnly": "npm test && npm run build"
   },
   "publishConfig": {

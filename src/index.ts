@@ -5,6 +5,7 @@ import type {} from '@deepseek-ai/dsh-sandbox-policy'
 import type {} from '@deepseek-ai/dsh-user-approval'
 import { assertSandboxContract, validateDshRuntime } from './compatibility.ts'
 import type { DshRuntimeCompatibility } from './compatibility.ts'
+import { installPtcSchemaProjection } from './ptc-schema-projection.ts'
 import { Supervisor } from './supervisor.ts'
 
 export interface Config {
@@ -16,7 +17,7 @@ export const Config: z<Config> = z.object({
 })
 
 export const name = 'sandbox-escalation-fix'
-export const inject = ['agents', 'tools', 'sandboxPolicy', 'approval']
+export const inject = ['agents', 'tools', 'systemPrompt', 'sandboxPolicy', 'approval']
 
 export function startPlugin(
   ctx: Context,
@@ -31,6 +32,7 @@ export function startPlugin(
   assertSandboxContract()
   const supervisor = new Supervisor(ctx)
   ctx.effect(() => supervisor.start(), 'sandbox-escalation-fix.lifecycle()')
+  ctx.effect(() => installPtcSchemaProjection(ctx), 'sandbox-escalation-fix.ptc-schema()')
   if ((config.logLevel ?? 'info') !== 'silent') {
     ctx.logger.info('sandbox-escalation-fix: session-aware tool wrappers enabled')
   }

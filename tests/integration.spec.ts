@@ -184,7 +184,7 @@ describe('installed plugin', () => {
     const warning = vi.spyOn(ctx.logger, 'warn')
     await ctx.plugin(Object.assign((inner: Context) => {
       startPlugin(inner, {}, { mode: 'structural', unavailablePackages: [] })
-    }, { inject: ['agents', 'tools', 'sandboxPolicy', 'approval'] }))
+    }, { inject: Plugin.inject }))
     expect(warning).toHaveBeenCalledWith(expect.stringContaining('strict runtime tool-contract validation'))
     await ctx.fiber.dispose()
   })
